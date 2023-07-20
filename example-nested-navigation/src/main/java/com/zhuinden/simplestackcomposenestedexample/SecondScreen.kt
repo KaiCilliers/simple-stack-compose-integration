@@ -31,7 +31,7 @@ data object SecondKey: ComposeKey() {
 
 @Composable
 fun SecondScreen() {
-    val backstack = LocalBackstack.current
+    val currentBackstack = LocalBackstack.current
 
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -48,10 +48,11 @@ fun SecondScreen() {
                 .fillMaxWidth(),
             propagateMinConstraints = true,
         ) {
-            ComposeNavigator {
+            ComposeNavigator() {
                 createBackstack(
                     History.of(FirstNestedKey()),
-                    scopedServices = DefaultServiceProvider()
+                    scopedServices = DefaultServiceProvider(),
+                    parentBackstack = currentBackstack
                 )
             }
         }
@@ -59,7 +60,7 @@ fun SecondScreen() {
         Button(
             modifier = Modifier.align(CenterHorizontally),
             onClick = {
-                backstack.goTo(ThirdKey())
+                currentBackstack.goTo(ThirdKey())
             },
             content = {
                 Text("Open third Screen")

@@ -136,6 +136,7 @@ interface ComposeNavigatorInitializer {
         keyFilter: KeyFilter = DefaultKeyFilter(),
         keyParceler: KeyParceler = DefaultKeyParceler(),
         stateClearStrategy: StateClearStrategy = DefaultStateClearStrategy(),
+        parentBackstack: Backstack? = null,
         scopedServices: ScopedServices? = null,
         globalServices: GlobalServices? = null,
         globalServicesFactory: GlobalServices.Factory? = null,

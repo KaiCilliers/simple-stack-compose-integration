@@ -23,10 +23,14 @@ import com.zhuinden.simplestackextensions.servicesktx.rebind
 import kotlinx.parcelize.Parcelize
 
 class FirstNestedModel(
-    private val backstack: Backstack
+    val backstack: Backstack
 ): FirstNestedScreen.ActionHandler {
     override fun navigateToSecond() {
         backstack.goTo(SecondNestedKey())
+    }
+
+    override fun goToParentThird() {
+        backstack.parentServices?.goTo(ThirdKey)
     }
 }
 
@@ -51,8 +55,9 @@ data class FirstNestedKey(val title: String) : ComposeKey() {
 }
 
 class FirstNestedScreen private constructor() {
-    fun interface ActionHandler {
+    interface ActionHandler {
         fun navigateToSecond()
+        fun goToParentThird()
     }
 
     companion object {
@@ -60,6 +65,7 @@ class FirstNestedScreen private constructor() {
         @SuppressLint("ComposableNaming")
         operator fun invoke(title: String, modifier: Modifier = Modifier) {
             val eventHandler = rememberService<ActionHandler>()
+            val firstModel = rememberService<FirstNestedModel>()
 
             Column(
                 modifier = modifier
@@ -74,6 +80,13 @@ class FirstNestedScreen private constructor() {
                 }, content = {
                     Text(title)
                 })
+                if (firstModel.backstack.parentServices != null) {
+                    Button(onClick = {
+                        eventHandler.goToParentThird()
+                    }, content = {
+                        Text("Go to parent third")
+                    })
+                }
             }
         }
     }
